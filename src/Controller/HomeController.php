@@ -21,4 +21,10 @@ final class HomeController extends AbstractController
     {
         return $this->render('home/contact.html.twig');
     }
+
+    #[Route('/logout', name: 'app_logout')]
+    public function logout(): void
+    {
+        throw new \LogicException('This method can be blank...');
+    }
 }
