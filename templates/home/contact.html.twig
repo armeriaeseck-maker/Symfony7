@@ -1,12 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Contact{% endblock %}
+{% block title %}
+    Contact
+{% endblock %}
 
 {% block body %}
+
     <h1>Nous contacter</h1>
 
-    <p>Nom : Ibrahima Seck</p>
-    <p>Email : ibrahima@email.com</p>
-    <p>Téléphone : 06 00 00 00 00</p>
-    <p>Ville : Toulouse</p>
+    {# {{ dump(coordonnees) }} #}
+
+    {% include 'home/_partial.html.twig' with {'coordonnees': coordonnees1} %}
+    {# {% include 'home/_partial.html.twig' with {'coordonnees': coordonnees2} %} #}
 {% endblock %}

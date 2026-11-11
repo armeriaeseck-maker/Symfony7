@@ -1,20 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}
+  Accueil
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+  <div class="container mt-4">
+    <h1>Accueil ✅</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    {% if app.user %}
+      <h2>Bonjour {{ app.user.prenom }}</h2>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Symfony/monsymfony/projet_altern/src/Controller/HomeController.php</code></li>
-        <li>Your template at <code>C:/Symfony/monsymfony/projet_altern/templates/home/index.html.twig</code></li>
-    </ul>
-</div>
+      <p>Bienvenue sur votre espace personnel.</p>
+    {% else %}
+      <h2>Bienvenue</h2>
+
+      <p>Veuillez vous connecter pour accéder à votre espace personnel.</p>
+    {% endif %}
+  </div>
 {% endblock %}
