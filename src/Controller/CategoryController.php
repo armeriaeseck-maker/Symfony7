@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 #[Route('/category')]
 final class CategoryController extends AbstractController
@@ -29,12 +30,39 @@ final class CategoryController extends AbstractController
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
 
+$path = $this->getParameter('kernel.project_dir') . '/public/uploads/';
+
         if ($form->isSubmitted() && $form->isValid()) {
+            //$file = $form['image']->getData();
+           // dd($file); 
+            $file = $form->get('image')->getData();
+
+if ($file) {
+
+    $originalName = pathinfo(
+        $file->getClientOriginalName(),
+        PATHINFO_FILENAME
+    );
+
+    $newName = 'uploads/' . $originalName . '-' . uniqid() . '.' . $file->guessExtension();
+
+    $category->setImage($newName);
+
+    try {
+        $file->move($path, $newName);
+    } catch (FileException $e) {
+        dd($e->getMessage());
+    }
+}
+
             $entityManager->persist($category);
             $entityManager->flush();
-
+            //ajout de flash message
+            $this->addFlash('success','Catégorie ajoutée avec succès'); 
             return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
         }
+
+
 
         return $this->render('category/new.html.twig', [
             'category' => $category,
@@ -58,7 +86,7 @@ final class CategoryController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-
+            $this->addFlash('success','Mise à jour réussie');
             return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -75,7 +103,7 @@ final class CategoryController extends AbstractController
             $entityManager->remove($category);
             $entityManager->flush();
         }
-
+         $this->addFlash('success','Suppression réussie');
         return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
     }
 }
