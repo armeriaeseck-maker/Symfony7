@@ -1,4 +1,7 @@
-{% for key, item in coordonnees %}
-  {{ key }} : {{ item|upper }} <br />
-{% endfor %}
-<br />
+<div class="card p-3 mb-3">
+  {% for key, item in coordonnees %}
+    <p>
+      <strong>{{ key }}</strong> : {{ item|upper }}
+    </p>
+  {% endfor %}
+</div>

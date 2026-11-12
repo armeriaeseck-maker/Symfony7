@@ -6,10 +6,12 @@
 
 {% block body %}
 
-    <h1>Nous contacter</h1>
+<h1>Nous contacter</h1>
 
-    {# {{ dump(coordonnees) }} #}
+<h3>Contact 1</h3>
+{% include 'home/_partial.html.twig' with {'coordonnees': coordonnees1} %}
 
-    {% include 'home/_partial.html.twig' with {'coordonnees': coordonnees1} %}
-    {# {% include 'home/_partial.html.twig' with {'coordonnees': coordonnees2} %} #}
+<h3>Contact 2</h3>
+{% include 'home/_partial.html.twig' with {'coordonnees': coordonnees2} %}
+
 {% endblock %}
