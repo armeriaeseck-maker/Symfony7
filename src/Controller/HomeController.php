@@ -8,9 +8,22 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Service\MessageGenerator;
+use App\Service\PHPMailService;
+
 
 final class HomeController extends AbstractController
 {
+    protected $pass;
+    public function __construct(string $gmailpass)
+    {
+
+        $this->pass = $gmailpass;
+    }
+
+
+
+
     #[Route('/home', name: 'app_home')]
     public function index(): Response
     {
@@ -56,30 +69,94 @@ final class HomeController extends AbstractController
 
         return $this->render('home/email.html.twig');
     }
+
     //php mailer
+
     #[Route('/phpmail', name: 'app_phpmail')]
     public function phpmail(): Response
     {
-        // configuration du mailer
-        $mail = (new PHPMailer(true));
-        $mail->isSMTP();                                            //Send using SMTP
-        $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
-        $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-        $mail->Username   = 'armeriaeseck@gmail.com';                     //SMTP username
-        $mail->Password   = 'frvdspbvfyzcxbmf';                               //SMTP password
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-        $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+        $mail = new PHPMailer(true);
 
-        //envoi mail
-        $mail->setFrom('from@example.com', 'Mailer');
-        $mail->addAddress('armeriaeseck@gmail.com', 'Joe User');
-        $mail->isHTML(true);                                  //Set email format to HTML
-        $mail->Subject = 'Test avec phpmail';
-        $mail->Body    = 'This is the HTML message body <b>in bold!</b>';    //Add a recipient
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.gmail.com';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = 'armeriaeseck@gmail.com';
+        $mail->Password   = 'frvdspbvfyzcxbmf';
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port       = 587;
+
+        $mail->setFrom('armeriaeseck@gmail.com', 'Ibrahima');
+        $mail->addAddress('armeriaeseck@gmail.com');
+
+        $mail->isHTML(true);
+        $mail->Subject = 'Test PHPMailer';
+        $mail->Body    = '<h2>Email envoyé depuis PHPMailer</h2>';
+
         $mail->send();
 
-
-
         return $this->render('home/email.html.twig');
+    }
+
+    //message generator service
+    #[Route('/service', name: 'app_service')]
+    public function service(MessageGenerator $msg): Response
+    {
+        return $this->render('home/service.html.twig', [
+            'controller_name' => $msg->getHappyMessage(),
+        ]);
+    }
+
+    //php mail service
+    #[Route('/phpmail_service', name: 'app_phpmail_service')]
+    public function phpmailservice(PHPMailService $mail): Response
+    {
+        $mail->setFrom('armeriaeseck@gmail.com', 'Ibrahima');
+        $mail->addAddress('armeriaeseck@gmail.com');
+
+        $mail->isHTML(true);
+        $mail->Subject = 'Test avec PHPMailService';
+        $mail->Body = '<h2>Email envoyé depuis le service PHPMailer</h2>';
+
+        $mail->send();
+
+        return $this->render('home/email.html.twig', [
+            'controller_name' => "Le service mail a réussi l'envoi"
+        ]);
+    }
+
+    //tiers service
+    #[Route('/tiers_service', name: 'app_tiers_service')]
+    public function tiersService(): Response
+    {
+        $mail = new PHPMailer(true);
+
+        try {
+
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'armeriaeseck@gmail.com';
+            $mail->Password = $this->pass;
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = 587;
+
+            $mail->setFrom('armeriaeseck@gmail.com', 'Ibrahima');
+            $mail->addAddress('armeriaeseck@gmail.com');
+
+            $mail->isHTML(true);
+            $mail->Subject = 'Tiers Service 2';
+            $mail->Body = '<h2>Email envoyé depuis Tiers Service</h2>';
+
+            $mail->send();
+
+            return $this->render('home/email.html.twig', [
+                'controller_name' => 'Email envoyé avec succès'
+            ]);
+        } catch (\Exception $e) {
+
+            return new Response(
+                'Erreur PHPMailer : ' . $mail->ErrorInfo
+            );
+        }
     }
 }
