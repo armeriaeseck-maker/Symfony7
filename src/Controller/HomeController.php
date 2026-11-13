@@ -110,6 +110,7 @@ final class HomeController extends AbstractController
     #[Route('/phpmail_service', name: 'app_phpmail_service')]
     public function phpmailservice(PHPMailService $mail): Response
     {
+        //envoi du mail
         $mail->setFrom('armeriaeseck@gmail.com', 'Ibrahima');
         $mail->addAddress('armeriaeseck@gmail.com');
 
