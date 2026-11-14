@@ -33,15 +33,19 @@
               <td>{{ user.email }}</td>
 
               <td>
-                {% for role in user.roles %}
-                  {% if role == 'ROLE_ADMIN' %}
-                    <span class="badge bg-danger">Admin</span>
-                  {% elseif role == 'ROLE_EMPLOYEE' %}
-                    <span class="badge bg-warning text-dark">Employé</span>
-                  {% elseif role == 'ROLE_USER' %}
-                    <span class="badge bg-primary">Client</span>
-                  {% endif %}
-                {% endfor %}
+                {% if 'ROLE_ADMIN' in user.roles %}
+                  <span class="badge bg-danger">👑 Admin</span>
+
+                  <span class="badge bg-warning text-dark">🛠 Employé</span>
+
+                  <span class="badge bg-primary">👤 Client</span>
+                {% elseif 'ROLE_EMPLOYEE' in user.roles %}
+                  <span class="badge bg-warning text-dark">🛠 Employé</span>
+
+                  <span class="badge bg-primary">👤 Client</span>
+                {% else %}
+                  <span class="badge bg-primary">👤 Client</span>
+                {% endif %}
               </td>
 
               <td>{{ user.nom }}</td>

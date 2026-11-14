@@ -10,10 +10,14 @@
   {% if app.user %}
     <h2>Bonjour {{ app.user.prenom }}</h2>
 
-    <p>Rôles : {{ app.user.roles|join(', ') }}</p>
+    {# <p>Rôles enregistrés : {{ app.user.roles|join(', ') }}</p> #}
 
     {% if is_granted('ROLE_ADMIN') %}
       <h3>👑 Vous êtes ADMIN</h3>
+    {% endif %}
+
+    {% if is_granted('ROLE_EMPLOYEE') %}
+      <h3>🛠 Vous êtes EMPLOYÉ</h3>
     {% endif %}
 
     {% if is_granted('ROLE_USER') %}

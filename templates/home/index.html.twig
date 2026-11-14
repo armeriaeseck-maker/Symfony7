@@ -18,8 +18,23 @@
           <p class="lead text-muted">Bienvenue sur votre espace personnel.</p>
 
           <div class="alert alert-info">
-            <strong>Rôles enregistrés :</strong>
-            {{ app.user.roles|join(', ') }}
+            <strong>Rôles effectifs :</strong>
+
+            <br /><br />
+
+            {% if is_granted('ROLE_ADMIN') %}
+              <span class="badge bg-danger">👑 ROLE_ADMIN</span>
+
+              <span class="badge bg-warning text-dark">🛠 ROLE_EMPLOYEE</span>
+
+              <span class="badge bg-primary">👤 ROLE_USER</span>
+            {% elseif is_granted('ROLE_EMPLOYEE') %}
+              <span class="badge bg-warning text-dark">🛠 ROLE_EMPLOYEE</span>
+
+              <span class="badge bg-primary">👤 ROLE_USER</span>
+            {% else %}
+              <span class="badge bg-primary">👤 ROLE_USER</span>
+            {% endif %}
 
             <hr />
 
