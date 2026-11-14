@@ -1,12 +1,9 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}
   Category index
 {% endblock %}
-
 {% block body %}
   <h1>Category index</h1>
-
   <table class="table">
     <thead>
       <tr>
@@ -27,8 +24,11 @@
           <td>{{ category.Image }}</td>
           <td class="text-nowrap">{{ category.DateAdd ? category.DateAdd|date('Y-m-d H:i:s') : '' }}</td>
           <td class="text-nowrap">
-            <a href="{{ path('app_category_show', { id: category.id }) }}">show</a>
-            <a href="{{ path('app_category_edit', { id: category.id }) }}">edit</a>
+            <div class="d-flex gap-2">
+              <a href="{{ path('app_category_show', { id: category.id }) }}" class="btn btn-info btn-sm text-white rounded-pill">👁 Voir</a>
+
+              <a href="{{ path('app_category_edit', { id: category.id }) }}" class="btn btn-warning btn-sm text-white rounded-pill">✏️ Modifier</a>
+            </div>
           </td>
         </tr>
       {% else %}
@@ -38,6 +38,5 @@
       {% endfor %}
     </tbody>
   </table>
-
-  <a href="{{ path('app_category_new') }}">Create new</a>
+  <a href="{{ path('app_category_new') }}" class="btn btn-success rounded-pill px-4 shadow-sm">➕ Nouvelle catégorie</a>
 {% endblock %}

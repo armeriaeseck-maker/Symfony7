@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Nouveau produit
+{% endblock %}
+
+{% block body %}
+  <div class="container mt-4">
+    <div class="card shadow-sm">
+      <div class="card-header bg-success text-white">
+        <h2>➕ Nouveau produit</h2>
+      </div>
+
+      <div class="card-body">
+        <p>Page de création de produit.</p>
+
+        <a href="{{ path('app_product') }}" class="btn btn-secondary">↩ Retour</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

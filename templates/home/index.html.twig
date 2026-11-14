@@ -5,17 +5,107 @@
 {% endblock %}
 
 {% block body %}
-  <div class="container mt-4">
-    <h1>Accueil ✅</h1>
-
+  <div class="container py-5">
     {% if app.user %}
-      <h2>Bonjour {{ app.user.prenom }}</h2>
+      <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white">
+          <h2 class="mb-0">🏠 Tableau de bord</h2>
+        </div>
 
-      <p>Bienvenue sur votre espace personnel.</p>
+        <div class="card-body">
+          <h3 class="mb-3">Bonjour {{ app.user.prenom }} 👋</h3>
+
+          <p class="lead text-muted">Bienvenue sur votre espace personnel.</p>
+
+          <div class="alert alert-info">
+            <strong>Rôles enregistrés :</strong>
+            {{ app.user.roles|join(', ') }}
+
+            <hr />
+
+            <p>ROLE_ADMIN :
+              {{ is_granted('ROLE_ADMIN') ? '✅ OUI' : '❌ NON' }}</p>
+
+            <p>ROLE_EMPLOYEE :
+              {{ is_granted('ROLE_EMPLOYEE') ? '✅ OUI' : '❌ NON' }}</p>
+
+            <p>ROLE_USER :
+              {{ is_granted('ROLE_USER') ? '✅ OUI' : '❌ NON' }}</p>
+          </div>
+
+          <hr />
+
+          <div class="row g-4">
+            {% if is_granted('ROLE_USER') %}
+              <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                  <div class="card-body text-center">
+                    <h1>👤</h1>
+                    <h5>Mon compte</h5>
+
+                    <p class="text-muted">Espace utilisateur.</p>
+
+                    <span class="badge bg-primary">ROLE_USER</span>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+
+            {% if is_granted('ROLE_EMPLOYEE') %}
+              <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                  <div class="card-body text-center">
+                    <h1>📦</h1>
+                    <h5>Produits</h5>
+
+                    <p class="text-muted">Gestion des produits.</p>
+
+                    <a href="{{ path('app_product') }}" class="btn btn-primary">Accéder</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                  <div class="card-body text-center">
+                    <h1>📂</h1>
+                    <h5>Catégories</h5>
+
+                    <p class="text-muted">Gestion des catégories.</p>
+
+                    <a href="{{ path('app_category_index') }}" class="btn btn-success">Accéder</a>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+
+            {% if is_granted('ROLE_ADMIN') %}
+              <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                  <div class="card-body text-center">
+                    <h1>👥</h1>
+                    <h5>Utilisateurs</h5>
+
+                    <p class="text-muted">Administration des comptes.</p>
+
+                    <a href="{{ path('app_user_index') }}" class="btn btn-warning text-white">Accéder</a>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
     {% else %}
-      <h2>Bienvenue</h2>
+      <div class="card shadow border-0">
+        <div class="card-body text-center py-5">
+          <h2>Bienvenue 👋</h2>
 
-      <p>Veuillez vous connecter pour accéder à votre espace personnel.</p>
+          <p class="lead">Connectez-vous pour accéder à votre espace personnel.</p>
+
+          <a href="{{ path('app_login') }}" class="btn btn-primary btn-lg">Se connecter</a>
+        </div>
+      </div>
     {% endif %}
   </div>
 {% endblock %}

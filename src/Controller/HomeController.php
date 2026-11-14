@@ -17,12 +17,8 @@ final class HomeController extends AbstractController
     protected $pass;
     public function __construct(string $gmailpass)
     {
-
         $this->pass = $gmailpass;
     }
-
-
-
 
     #[Route('/home', name: 'app_home')]
     public function index(): Response
@@ -51,7 +47,6 @@ final class HomeController extends AbstractController
                 "Téléphone" => "06 10 52 63 00",
                 "Ville" => "Paris",
             ]
-
         ]);
     }
 
@@ -84,16 +79,12 @@ final class HomeController extends AbstractController
         $mail->Password   = 'frvdspbvfyzcxbmf';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
-
         $mail->setFrom('armeriaeseck@gmail.com', 'Ibrahima');
         $mail->addAddress('armeriaeseck@gmail.com');
-
         $mail->isHTML(true);
         $mail->Subject = 'Test PHPMailer';
         $mail->Body    = '<h2>Email envoyé depuis PHPMailer</h2>';
-
         $mail->send();
-
         return $this->render('home/email.html.twig');
     }
 
@@ -113,13 +104,10 @@ final class HomeController extends AbstractController
         //envoi du mail
         $mail->setFrom('armeriaeseck@gmail.com', 'Ibrahima');
         $mail->addAddress('armeriaeseck@gmail.com');
-
         $mail->isHTML(true);
         $mail->Subject = 'Test avec PHPMailService';
         $mail->Body = '<h2>Email envoyé depuis le service PHPMailer</h2>';
-
         $mail->send();
-
         return $this->render('home/email.html.twig', [
             'controller_name' => "Le service mail a réussi l'envoi"
         ]);
@@ -130,9 +118,7 @@ final class HomeController extends AbstractController
     public function tiersService(): Response
     {
         $mail = new PHPMailer(true);
-
         try {
-
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
@@ -140,21 +126,16 @@ final class HomeController extends AbstractController
             $mail->Password = $this->pass;
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
-
             $mail->setFrom('armeriaeseck@gmail.com', 'Ibrahima');
             $mail->addAddress('armeriaeseck@gmail.com');
-
             $mail->isHTML(true);
             $mail->Subject = 'Tiers Service 2';
             $mail->Body = '<h2>Email envoyé depuis Tiers Service</h2>';
-
             $mail->send();
-
             return $this->render('home/email.html.twig', [
                 'controller_name' => 'Email envoyé avec succès'
             ]);
         } catch (\Exception $e) {
-
             return new Response(
                 'Erreur PHPMailer : ' . $mail->ErrorInfo
             );

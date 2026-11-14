@@ -5,25 +5,19 @@
 {% endblock %}
 
 {% block body %}
-  <div class="container mt-4">
-    <h1>Produits ✅</h1>
+  <h1>Produits ✅</h1>
 
-    {% if app.user %}
-      <p>Rôles : {{ app.user.roles|join(', ') }}</p>
+  {% if app.user %}
+    <h2>Bonjour {{ app.user.prenom }}</h2>
 
-      {% if is_granted('ROLE_ADMIN') %}
-        <h2>Vous êtes ADMIN {{ app.user.prenom }}</h2>
-      {% endif %}
+    <p>Rôles : {{ app.user.roles|join(', ') }}</p>
 
-      {% if is_granted('ROLE_EMPLOYEE') %}
-        <h2>Vous êtes employé {{ app.user.prenom }}</h2>
-      {% endif %}
-
-      {% if is_granted('ROLE_USER') %}
-        <h2>Vous êtes utilisateur {{ app.user.prenom }}</h2>
-      {% endif %}
-    {% else %}
-      <h2>Vous n'êtes pas connecté</h2>
+    {% if is_granted('ROLE_ADMIN') %}
+      <h3>👑 Vous êtes ADMIN</h3>
     {% endif %}
-  </div>
+
+    {% if is_granted('ROLE_USER') %}
+      <h3>👤 Vous êtes UTILISATEUR</h3>
+    {% endif %}
+  {% endif %}
 {% endblock %}

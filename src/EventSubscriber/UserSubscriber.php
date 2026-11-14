@@ -10,7 +10,9 @@ use Symfony\Component\Mime\Email;
 
 class UserSubscriber implements EventSubscriberInterface
 {
-       public function __construct(private MailerInterface $mailer) {}
+       public function __construct(
+              private MailerInterface $mailer
+       ) {}
 
        public static function getSubscribedEvents(): array
        {
@@ -24,35 +26,28 @@ class UserSubscriber implements EventSubscriberInterface
        {
               $email = (new Email())
                      ->from('armeriaeseck@gmail.com')
-                     ->to($event->getEmail())
-                     ->subject('Bienvenue !')
-                     ->html('<h2>Bonjour,</h2><p>Votre compte a été créé avec succès.</p>');
+                     ->to('armeriaeseck@gmail.com') // adresse de réception
+                     ->subject('Nouvel utilisateur créé')
+                     ->html('
+                <h2>Nouvel utilisateur</h2>
+                <p>Un nouvel utilisateur a été créé avec succès.</p>
+                <p>Email : ' . $event->getEmail() . '</p>
+            ');
 
-              try {
-                     $this->mailer->send($email);
-              } catch (\Exception $e) {
-                     // Gérer l'erreur si besoin
-              }
+              $this->mailer->send($email);
        }
+
        public function onUserDeleteSuccess(UserDeleteSuccessEvent $event): void
        {
-              $recipientEmail = $event->getEmail();
-
-              // Vérification que l'e-mail est valide avant l'envoi
-              if (!filter_var($recipientEmail, FILTER_VALIDATE_EMAIL)) {
-                     return; // Ignore l'envoi si l'e-mail est malformé (ex: "bint")
-              }
-
               $email = (new Email())
                      ->from('armeriaeseck@gmail.com')
-                     ->to($recipientEmail)
-                     ->subject('Suppression de votre compte')
-                     ->html('<h2>Bonjour,</h2><p>Nous vous confirmons que votre compte a été supprimé avec succès.</p>');
+                     ->to('armeriaeseck@gmail.com')
+                     ->subject('Utilisateur supprimé')
+                     ->html('
+                <h2>Suppression utilisateur</h2>
+                <p>Le compte ' . $event->getEmail() . ' a été supprimé.</p>
+            ');
 
-              try {
-                     $this->mailer->send($email);
-              } catch (\Exception $e) {
-                     // Gérer l'erreur si besoin
-              }
+              $this->mailer->send($email);
        }
 }
